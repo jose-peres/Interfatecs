@@ -159,6 +159,12 @@ elif [ "$KEEP" = "true" ]; then
   cp "$ARG_FILE" "$TESTSET_PATH/$PROBLEM_DIR"
 fi
 cd "$TESTSET_PATH/$PROBLEM_DIR" || { rm "$TESTSET_PATH/$PROBLEM_DIR/$BASENAME"; exit 1; }
+cleanup() {
+  rm -f "$BASENAME" user_answer
+  rm -f *.class *.hi *.o executable
+  rm -rf __pycache__
+}
+trap "cleanup; echo; echo -e '\e[31mAborted\e[0m'; exit 130" INT
 echo "Judging problem $PROBLEM ($PROBLEM_NAME)..."
 
 case $EXT in
@@ -253,10 +259,7 @@ esac
 if [ $? -ne 0 ]; then
   echo
   echo -e "\e[31mCompilation error\e[0m"
-  if [ "$EXT" = "py" ]; then
-    rm -rf __pycache__
-  fi
-  rm "$PROBLEM_NAME"."$EXT"
+  cleanup
   exit 1
 fi
 
@@ -348,6 +351,4 @@ for INPUT_FILE in in/*; do
   break
 done
 
-rm "$PROBLEM_NAME"."$EXT" user_answer
-rm -rf *.class *.o *.hi executable
-rm -rf __pycache__
+cleanup
