@@ -3,8 +3,19 @@
 error_counter=0
 declare -a problem_names
 
+if ! command -v pdftotext >/dev/null 2>&1; then
+  echo "ERROR: Missing dependency pdftotext (install poppler-utils)." >&2
+  exit 2
+fi
+
 validate_testset(){
   local testset_dir=$1
+
+  if [[ ${#problem_names[@]} -eq 0 ]]; then
+    echo "ERROR: $testset_dir: Could not determine expected problem folder names from the PDF." >&2
+    error_counter=$((error_counter + 1))
+    return
+  fi
 
   if [ ! -e "$testset_dir/judge.sh" ]; then
     echo "ERROR: $testset_dir: Missing file judge.sh" >&2
