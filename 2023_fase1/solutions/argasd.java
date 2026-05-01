@@ -11,16 +11,8 @@ public class argasd {
     String[] parts = in.readLine().split(" ");
     int nEmpr = Integer.parseInt(parts[0]);
     int qPadrao = Integer.parseInt(parts[1]);
-    if (nEmpr < 3 || nEmpr > 10 || qPadrao < 10) {
-      System.out.println("Input error");
-      return;
-    }
 
     int qDias = Integer.parseInt(in.readLine());
-    if (qDias <= 0) {
-      System.out.println("Input error");
-      return;
-    }
 
     int nRegs = nEmpr * nEmpr - nEmpr;
     StringBuilder out = new StringBuilder();
@@ -34,10 +26,6 @@ public class argasd {
         parts = in.readLine().split(" ");
         int empr1 = Integer.parseInt(parts[0]);
         int empr2 = Integer.parseInt(parts[1]);
-        if (empr1 < 1 || empr1 > nEmpr || empr2 < 1 || empr2 > nEmpr) {
-          System.out.println("Input error");
-          return;
-        }
         int botijoes = Integer.parseInt(parts[2]);
         estoque[empr1 - 1][empr2 - 1] += botijoes;
       }
