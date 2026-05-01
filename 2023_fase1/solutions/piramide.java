@@ -10,13 +10,8 @@ public class piramide {
     String line = in.readLine();
     String[] parts = line.split(" ");
     int N = Integer.parseInt(parts[0]);
-    if (N < 1 || N > 26) {
-      System.out.println("Invalid input");
-    }
+
     String P = parts[1];
-    if (!P.equals("maiusculas") && !P.equals("minusculas")) {
-      System.out.println("Invalid input");
-    }
 
     char firstChar = P.equals("maiusculas") ? 'A' : 'a';
     StringBuilder out = new StringBuilder();
