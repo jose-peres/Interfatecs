@@ -1,87 +1,23 @@
-string = input()
-letters = [
-    'A',
-    'B',
-    'C',
-    'D',
-    'E',
-    'F',
-    'G', 
-    'H',
-    'I',
-    'J', 
-    'K',
-    'L', 
-    'M', 
-    'N', 
-    'O', 
-    'P', 
-    'Q', 
-    'R', 
-    'S', 
-    'T', 
-    'U', 
-    'V', 
-    'W', 
-    'X', 
-    'Y', 
-    'Z']
+import re
 
-def a():
-    len_string = len(string)
-    if len_string <= 6 and len_string > 1 and (string[0] == 'A' or string[0] == 'P'):
-        for ptr_ch in range(len_string):
-            if ptr_ch == 0: continue
-            ch = string[ptr_ch]
-            try:
-                int(ch)
-            except:
-                break
-        else: return 'Placa muito antiga'
-    if len_string == 6 and (string[0] in letters) and (string[1] in letters):
-        for ptr_ch in range(len_string):
-            if ptr_ch <= 1: continue
-            ch = string[ptr_ch]
-            try:
-                int(ch)
-            except:
-                break
-        else: return 'Placa AA-9999'
-    if len_string <= 7:
-        for ch in string:
-            try:
-                int(ch)
-            except:
-                break
-        else: return 'Placa numerica'
+s = input().strip()
 
-    if len_string == 7 and string[0] in letters and string[1] in letters and string[2] in letters:
+def classify(s):
+    if 1 < len(s) <= 6 and s[0] in "AP" and s[1:].isdigit():
+        return "Placa muito antiga"
 
-        for ptr_ch in range(len_string):
-            if ptr_ch <= 2: continue
-            ch = string[ptr_ch]
-            try:
-                int(ch)
-            except:
-                break
-        else: return 'Placa AAA-9999'
+    if len(s) == 6 and s[:2].isalpha() and s[2:].isdigit():
+        return "Placa AA-9999"
 
-    if len_string == 7 and string[0] in letters and string[1] in letters and string[2] in letters:
-        valid = True
-        try:
-            int(string[3])
-        except:
-            return'Placa invalida'
-        if valid and not(string[4] in letters):
-            return'Placa invalida'
-        try:
-            int(string[5])
-            int(string[6])
-        except:
-            return'Placa invalida'
-        
-        if valid: return 'Placa Mercosul'
+    if len(s) <= 7 and s.isdigit():
+        return "Placa numerica"
 
-    return'Placa invalida'
+    if len(s) == 7 and s[:3].isalpha() and s[3:].isdigit():
+        return "Placa AAA-9999"
 
-print(a())
+    if re.fullmatch(r"[A-Z]{3}\d[A-Z]\d{2}", s):
+        return "Placa Mercosul"
+
+    return "Placa invalida"
+
+print(classify(s))
