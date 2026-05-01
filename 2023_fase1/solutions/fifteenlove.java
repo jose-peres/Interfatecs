@@ -10,25 +10,13 @@ public class fifteenlove {
 
     int N = Integer.valueOf(in.readLine());
     String results = in.readLine();
-    if (N < 1 || N > 300) {
-      System.out.println("error in input");
-      return;
-    }
-    if (results.length() != N) {
-      System.out.println("error in input");
-      return;
-    }
+    
     for (int i = 0; i < N; i++) {
       char score = results.charAt(i);
-      if (game.isGameOver()) {
-        System.out.println("error in input");
-      }
       if (score == 'W') {
         game.wonPoint();
       } else if (score == 'L') {
         game.lostPoint();
-      } else {
-        System.out.println("error in input");
       }
     }
     System.out.println(game);
