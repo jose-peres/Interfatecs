@@ -11,30 +11,12 @@ public class silas {
     int x = Integer.valueOf(parts[0]);
     int y = Integer.valueOf(parts[1]);
 
-    if (p < 1 || p > 10000) {
-      System.out.println("Input error (p): " + p);
-      return;
-    }
-
-    if (x < 1 || x > 80) {
-      System.out.println("Input error (x): " + x);
-      return;
-    }
-
-    if (y < 1 || y > 80) {
-      System.out.println("Input error (y): " + y);
-      return;
-    }
-
     char[][] map = new char[x][y];
     Point start = new Point(0, 0, 0);
 
     for (int i = 0; i < x; i++) {
       parts = in.readLine().split(" ");
-      if (parts.length != y) {
-        System.out.println("Input error line parts length not equal to y" + parts.length + ": " + parts);
-        return;
-      }
+
       for (int j = 0; j < y; j++) {
         String part = parts[j];
         if (part.equals("S")) {
