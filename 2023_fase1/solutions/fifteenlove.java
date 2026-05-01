@@ -1,234 +1,75 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 
 public class fifteenlove {
-  public static void main(String[] args) throws IOException {
-    BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+  static int p1p = 0, p2p = 0; // points
+  static int p1g = 0, p2g = 0; // games
+  static int p1s = 0, p2s = 0; // sets
+  static boolean tie = false;
 
-    Game game = new Game();
+  static void resetPoints() { p1p = p2p = 0; }
+  static void resetGames() { p1g = p2g = 0; }
 
-    int N = Integer.valueOf(in.readLine());
-    String results = in.readLine();
-    
-    for (int i = 0; i < N; i++) {
-      char score = results.charAt(i);
-      if (score == 'W') {
-        game.wonPoint();
-      } else if (score == 'L') {
-        game.lostPoint();
-      }
+  static boolean winGame() {
+    if (!tie && (p1p >= 4 || p2p >= 4) && Math.abs(p1p - p2p) >= 2) {
+      if (p1p > p2p) p1g++; else p2g++;
+      resetPoints();
+      return true;
     }
-    System.out.println(game);
-  }
-
-}
-
-class Game {
-  int player1Score;
-  int player2Score;
-  int player1Sets;
-  int player2Sets;
-  int player1Games;
-  int player2Games;
-  boolean isTieBreak;
-  boolean isPlayer1Serving;
-  boolean isGameOver;
-  String[] points = { "0", "15", "30", "40" };
-  boolean wasPlayer1ServingBeforeTieBreak = false;
-
-  Game() {
-    player1Score = 0;
-    player2Score = 0;
-    player1Sets = 0;
-    player2Sets = 0;
-    player1Games = 0;
-    player2Games = 0;
-    isPlayer1Serving = true;
-    isTieBreak = false;
-    isGameOver = false;
-  }
-
-  boolean isGameOver() {
-    return isGameOver;
-  }
-
-  void wonPoint() {
-    if (isGameOver) {
-      return;
-    }
-    if (isPlayer1Serving) {
-      player1Score++;
-    } else {
-      player2Score++;
-    }
-    handleScore();
-  }
-
-  void lostPoint() {
-    if (isGameOver) {
-      return;
-    }
-    if (isPlayer1Serving) {
-      player2Score++;
-    } else {
-      player1Score++;
-    }
-    handleScore();
-  }
-
-  void handleScore() {
-    if (isGameOver) {
-      return;
-    }
-    if (isTieBreak) {
-      if (checkIfAnyoneHasWonTheTieBreakAndAdjustIt()) {
-        if (checkIfAnyoneHasWonTheSetAndAdjustIt()) {
-          if (checkIfAnyoneHasWonTheMatch()) {
-            return;
-          } else {
-            player1Games = 0;
-            player2Games = 0;
-            player1Score = 0;
-            player2Score = 0;
-            isTieBreak = false;
-
-            if (wasPlayer1ServingBeforeTieBreak) {
-              isPlayer1Serving = false;
-            } else {
-              isPlayer1Serving = true;
-            }
-          }
-        }
-        changeSides();
-      } else {
-        if (player1Score + player2Score == 1) {
-          changeSides();
-        } else if (player1Score + player2Score > 1 && (player1Score + player2Score) % 2 != 0) {
-          changeSides();
-        }
-      }
-    } else {
-      if (checkIfAnyoneHasWonTheGameAndAdjustIt()) {
-        if (checkIfAnyoneHasWonTheSetAndAdjustIt()) {
-          if (checkIfAnyoneHasWonTheMatch()) {
-            return;
-          } else {
-            player1Games = 0;
-            player2Games = 0;
-            player1Score = 0;
-            player2Score = 0;
-            isTieBreak = false;
-          }
-        } else {
-          player1Score = 0;
-          player2Score = 0;
-        }
-        changeSides();
-      }
-    }
-
-  }
-
-  void changeSides() {
-    isPlayer1Serving = !isPlayer1Serving;
-  }
-
-  boolean checkIfAnyoneHasWonTheGameAndAdjustIt() {
-    if ((player1Score >= 4 || player2Score >= 4) && Math.abs(player1Score - player2Score) >= 2) {
-      if (player1Score > player2Score) {
-        player1Games++;
-      } else {
-        player2Games++;
-      }
+    if (tie && (p1p >= 7 || p2p >= 7) && Math.abs(p1p - p2p) >= 2) {
+      if (p1p > p2p) p1g++; else p2g++;
+      resetPoints();
       return true;
     }
     return false;
   }
 
-  boolean checkIfAnyoneHasWonTheTieBreakAndAdjustIt() {
-    if ((player1Score >= 7 || player2Score >= 7) && Math.abs(player1Score - player2Score) >= 2) {
-      if (player1Score > player2Score) {
-        player1Games++;
-      } else {
-        player2Games++;
-      }
+  static boolean winSet() {
+    if (p1g == 6 && p2g == 6) tie = true;
+
+    if (p1g == 7 || p2g == 7 || (Math.max(p1g, p2g) >= 6 && Math.abs(p1g - p2g) >= 2)) {
+      if (p1g > p2g) p1s++; else p2s++;
+      resetGames();
+      tie = false;
       return true;
     }
     return false;
   }
 
-  boolean doesAnyoneWonTheSet() {
-    return (player1Games == 7 || player2Games == 7
-        || ((player1Games == 6 || player2Games == 6) && Math.abs(player1Games - player2Games) >= 2));
-  }
+  public static void main(String[] args) throws Exception {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    int n = Integer.parseInt(br.readLine());
+    String s = br.readLine();
 
-  boolean checkIfAnyoneHasWonTheSetAndAdjustIt() {
-    if (doesAnyoneWonTheSet()) {
-      if (player1Games > player2Games) {
-        player1Sets++;
+    boolean serve = true;
+
+    for (int i = 0; i < n; i++) {
+      if (p1s == 3 || p2s == 3) break;
+
+      char c = s.charAt(i);
+
+      if (c == 'W') {
+        if (serve) p1p++; else p2p++;
       } else {
-        player2Sets++;
+        if (serve) p2p++; else p1p++;
       }
-      return true;
-    } else if (player1Games == 6 && player2Games == 6) {
-      isTieBreak = true;
-      wasPlayer1ServingBeforeTieBreak = isPlayer1Serving;
-    }
-    return false;
-  }
 
-  boolean doesAnyoneWonTheMatch() {
-    return (player1Sets == 3 || player2Sets == 3);
-  }
-
-  boolean checkIfAnyoneHasWonTheMatch() {
-    if (doesAnyoneWonTheMatch()) {
-      isGameOver = true;
-      return true;
-    }
-    return false;
-  }
-
-  public String getPlayer1Score() {
-    int score = player1Score;
-    if (isTieBreak) {
-      return String.valueOf(score);
-    } else if (score <= 3) {
-      return points[score];
-    } else {
-      if (score > player2Score) {
-        if (score - player2Score >= 2) {
-          return "GAME";
-        }
-        return "ADV";
-      } else {
-        return "40";
+      if (winGame()) {
+        serve = !serve;
+        winSet();
       }
     }
-  }
 
-  public String getPlayer2Score() {
-    int score = player2Score;
-    if (isTieBreak) {
-      return String.valueOf(score);
-    } else if (score <= 3) {
-      return points[score];
-    } else {
-      if (score > player1Score) {
-        if (score - player1Score >= 2) {
-          return "GAME";
-        }
-        return "ADV";
-      } else {
-        return "40";
-      }
-    }
-  }
+    String[] pts = {"0","15","30","40"};
 
-  public String toString() {
-    return player1Sets + "(" + player1Games + ")[" + getPlayer1Score() + "]-" + player2Sets + "(" + player2Games + ")["
-        + getPlayer2Score() + "]";
-  }
+    String sp1 = tie ? String.valueOf(p1p)
+        : (p1p <= 3 ? pts[p1p]
+        : (p1p > p2p ? (p1p - p2p >= 2 ? "GAME" : "ADV") : "40"));
 
+    String sp2 = tie ? String.valueOf(p2p)
+        : (p2p <= 3 ? pts[p2p]
+        : (p2p > p1p ? (p2p - p1p >= 2 ? "GAME" : "ADV") : "40"));
+
+    System.out.println(p1s + "(" + p1g + ")[" + sp1 + "]-" +
+                       p2s + "(" + p2g + ")[" + sp2 + "]");
+  }
 }
