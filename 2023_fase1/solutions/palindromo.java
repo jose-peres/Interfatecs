@@ -8,10 +8,6 @@ public class palindromo {
     String line;
 
     while ((line = in.readLine()) != null) {
-      if (line.length() > 10000) {
-        System.out.println("Input error");
-        return;
-      }
       line = line.replace(" ", "").replace("[^A-Za-z0-9]", "").toLowerCase();
 
       String normalized = Normalizer.normalize(line, Normalizer.Form.NFD);
