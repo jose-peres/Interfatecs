@@ -9,11 +9,6 @@ public class radar {
     BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
     int speedLimit = Integer.valueOf(in.readLine());
 
-    if (speedLimit < 0 || speedLimit > 300) {
-      System.out.println("Input error (speedLimit): " + speedLimit);
-      return;
-    }
-
     double maxSpeed;
     if (speedLimit <= 107) {
       maxSpeed = speedLimit + 7;
