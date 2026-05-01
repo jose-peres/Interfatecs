@@ -16,11 +16,6 @@ public class evento {
       int n = Integer.parseInt(parts[0]);
       int m = Integer.parseInt(parts[1]);
 
-      if (n < 2 || n > 2000 || m < 2 || m > (n * (n - 1)) / 2) {
-        System.out.println("Input error");
-        return;
-      }
-
       points = new int[n + 1][n + 1];
       visited = new boolean[n + 1];
 
