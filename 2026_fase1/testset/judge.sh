@@ -119,7 +119,7 @@ case $PROBLEM_NAME in
 	parque) 
     PROBLEM=J
 		PROBLEM_DIR="${problem_dirs[J]}"
-		TIME_LIMIT=1.0
+		TIME_LIMIT=3.0
 	;;
 
 	concinnitas) 
