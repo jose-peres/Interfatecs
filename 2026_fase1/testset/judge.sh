@@ -95,7 +95,7 @@ case $PROBLEM_NAME in
 	fotos) 
     PROBLEM=F
 		PROBLEM_DIR="${problem_dirs[F]}"
-		TIME_LIMIT=1.0
+		TIME_LIMIT=2.0
 	;;
 
 	ressonancia) 
